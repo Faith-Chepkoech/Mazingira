@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Environmental Footprint Calculator & Map</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" /> <!-- Leaflet CSS -->
+    <link rel="stylesheet" href="style.css"> <!-- Link to the CSS stylesheet -->
+</head>
+<body>
+    <div class="container">
+        <h3>Calculate Your Environmental Footprint</h3>
+        <form id="footprint-form">
+            <label for="energy">Energy Usage (kWh):</label>
+            <input type="number" id="energy" name="energy" required>
+            <label for="water">Water Usage (liters):</label>
+            <input type="number" id="water" name="water" required>
+            <label for="transport">Transport Distance (km):</label>
+            <input type="number" id="transport" name="transport" required>
+            <button type="submit">Calculate</button>
+        </form>
+
+        <div id="results">
+            <p>Energy Footprint: <span id="energy-footprint">0</span> kg CO2</p>
+            <p>Water Footprint: <span id="water-footprint">0</span> kg CO2</p>
+            <p>Transport Footprint: <span id="transport-footprint">0</span> kg CO2</p>
+            <p>Total Footprint: <span id="total-footprint">0</span> kg CO2</p>
+            <p>Trees Needed to Offset: <span id="carbon-offset">0</span></p>
+        </div>
+
+        <h3>Environmental Activities Map</h3>
+        <div id="map"></div>
+
+        <h3>Leaderboard</h3>
+        <table id="leaderboard">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Footprint (kg CO2)</th>
+                </tr>
+            </thead>
+            <tbody>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Load Leaflet.js library -->
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+    <script>
+        // Function to calculate environmental footprint
+        document.getElementById('footprint-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            // Fetch input values
+            const energyUsage = parseFloat(document.getElementById('energy').value);
+            const waterUsage = parseFloat(document.getElementById('water').value);
+            const transportDistance = parseFloat(document.getElementById('transport').value);
+
+            // Example coefficients for CO2 emissions
+            const energyFootprint = energyUsage * 0.233;  // 0.233 kg CO2 per kWh
+            const waterFootprint = waterUsage * 0.001;    // 0.001 kg CO2 per litre
+            const transportFootprint = transportDistance * 0.12;  // 0.12 kg CO2 per km
+
+            // Total footprint
+            const totalFootprint = energyFootprint + waterFootprint + transportFootprint;
+
+            // Carbon offset calculation (1 tree = 21 kg CO2 annually)
+            const treesNeeded = Math.ceil(totalFootprint / 21);
+
+            // Update the results in the HTML
+            document.getElementById('energy-footprint').textContent = energyFootprint.toFixed(2);
+            document.getElementById('water-footprint').textContent = waterFootprint.toFixed(2);
+            document.getElementById('transport-footprint').textContent = transportFootprint.toFixed(2);
+            document.getElementById('total-footprint').textContent = totalFootprint.toFixed(2);
+            document.getElementById('carbon-offset').textContent = treesNeeded;
+
+            // Update leaderboard
+            const name = prompt("Enter your name for the leaderboard:");
+            updateLeaderboard(name, totalFootprint);
+        });
+
+        // Function to update and render the leaderboard
+        function updateLeaderboard(name, footprint) {
+            let leaderboard = JSON.parse(localStorage.getItem('leaderboard')) || [];
+            leaderboard.push({ name: name, footprint: footprint });
+
+            // Sort leaderboard by footprint (ascending)
+            leaderboard.sort((a, b) => a.footprint - b.footprint);
+            localStorage.setItem('leaderboard', JSON.stringify(leaderboard));
+
+            renderLeaderboard(leaderboard);
+        }
+
+        function renderLeaderboard(leaderboard) {
+            const tbody = document.querySelector('#leaderboard tbody');
+            tbody.innerHTML = '';
+
+            leaderboard.forEach(entry => {
+                const row = `<tr>
+                                <td>${entry.name}</td>
+                                <td>${entry.footprint.toFixed(2)}</td>
+                            </tr>`;
+                tbody.innerHTML += row;
+            });
+        }
+
+        // Initialize the map
+        const map = L.map('map').setView([-1.2921, 36.8219], 6); // Center at Nairobi, Kenya
+
+        // Load OpenStreetMap tiles
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            maxZoom: 19,
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        }).addTo(map);
+
+        // Add markers for environmental activities
+        const activities = [
+            { coordinates: [-1.2921, 36.8219], title: "Tree Planting in Nairobi" },
+            { coordinates: [-0.0917, 34.7679], title: "Clean-up Drive in Kisumu" },
+            { coordinates: [0.5167, 35.2833], title: "Tree Planting in Eldoret" }
+        ];
+
+        activities.forEach(activity => {
+            L.marker(activity.coordinates)
+                .addTo(map)
+                .bindPopup(`<b>${activity.title}</b>`)
+                .openPopup();
+        });
+    </script>
+</body>
+</html>

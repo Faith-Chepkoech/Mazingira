@@ -1,0 +1,103 @@
+/* General Styles */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f0f8ff; /* Light background color */
+    margin: 0;
+    padding: 20px; /* Add padding to the body */
+}
+
+/* Container Styles */
+.container {
+    max-width: 900px;
+    margin: 0 auto; /* Center container */
+    padding: 20px;
+    background-color: #ffffff; /* White background for the container */
+    border-radius: 8px; /* Rounded corners */
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Light shadow for depth */
+}
+
+/* Headings Styles */
+h3 {
+    text-align: center; /* Center align headings */
+    color: #2c3e50; /* Darker color for headings */
+}
+
+/* Form Styles */
+form {
+    display: flex;
+    flex-direction: column; /* Stack form elements vertically */
+    gap: 10px; /* Space between form elements */
+    margin-bottom: 20px; /* Margin below the form */
+}
+
+form label {
+    font-weight: bold; /* Bold labels for better visibility */
+}
+
+/* Input and Button Styles */
+form input {
+    padding: 10px; /* Padding inside input fields */
+    border: 1px solid #ccc; /* Light border */
+    border-radius: 4px; /* Rounded corners */
+    width: 100%; /* Full width */
+}
+
+form button {
+    padding: 10px; /* Padding for the button */
+    background-color: #28a745; /* Green background */
+    color: white; /* White text */
+    border: none; /* Remove border */
+    border-radius: 4px; /* Rounded corners */
+    cursor: pointer; /* Pointer cursor on hover */
+}
+
+form button:hover {
+    background-color: #218838; /* Darker green on hover */
+}
+
+/* Results Section Styles */
+#results {
+    text-align: center; /* Center the results */
+    margin: 20px 0; /* Margin around results */
+}
+
+/* Map Styles */
+#map {
+    height: 400px; /* Fixed height for the map */
+    width: 100%; /* Full width */
+    margin: 20px 0; /* Margin around the map */
+}
+
+/* Leaderboard Styles */
+#leaderboard {
+    width: 100%; /* Full width */
+    margin: 20px 0; /* Margin around leaderboard */
+    border-collapse: collapse; /* Remove space between borders */
+}
+
+#leaderboard th,
+#leaderboard td {
+    padding: 10px; /* Padding in table cells */
+    border: 1px solid #ccc; /* Light border */
+    text-align: left; /* Left align text */
+}
+
+#leaderboard th {
+    background-color: #f0f8ff; /* Light background for headers */
+    font-weight: bold; /* Bold headers */
+}
+
+/* Responsive Styles */
+@media (max-width: 600px) {
+    body {
+        padding: 10px; /* Less padding on smaller screens */
+    }
+
+    .container {
+        padding: 15px; /* Less padding in the container */
+    }
+
+    form {
+        gap: 5px; /* Less gap between form elements */
+    }
+}
